@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Surprise!</title>
+    
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-color: #ff4d94;
+            --secondary-color: #f8b0c8;
+            --bg-color: #fff0f5;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            /* Background image path */
+            background-image: url('r.jpg');
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* All other styles are the same as before... */
+        .bg-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: -1; }
+        .balloon, .particle { position: absolute; animation: float 20s linear infinite; bottom: -100px; }
+        .balloon { width: 40px; height: 50px; background: var(--balloon-color, #ff6b6b); border-radius: 50%; opacity: 0.7; }
+        .balloon::after { content: ""; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 10px solid var(--balloon-color, #ff6b6b); }
+        .particle { width: 5px; height: 5px; background: var(--secondary-color); border-radius: 50%; animation-duration: 25s; }
+        @keyframes float { 0% { transform: translateY(0); opacity: 0.9; } 100% { transform: translateY(-120vh); opacity: 0; } }
+        #bodylov { z-index: 10; transition: opacity 1s ease-out; }
+        #konten { text-align: center; }
+        #kadoin { cursor: pointer; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        #kotakpesan { display: none; }
+        blockquote { background: rgba(255, 255, 255, 0.95); border-left: 10px solid var(--primary-color); padding: 25px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); width: 350px; animation: fadeInUp 1s ease-out; cursor: pointer; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        #kalimat { font-family: 'Dancing Script', cursive; font-size: 26px; color: var(--primary-color); }
+        #thinking { display: none; text-align: center; padding: 40px; }
+        .spinner { width: 60px; height: 60px; border: 5px solid var(--secondary-color); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #gallery { display: none; width:100vw; height:100vh; position:fixed; top:0; left:0; justify-content:center; align-items:center; background:white; }
+        .container { width: 300px; height: 300px; perspective: 1200px; position: relative; }
+        .carousel { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; animation: rotation 25s infinite linear; }
+        .carousel:hover { animation-play-state: paused; }
+        .carousel figure { display: block; position: absolute; width: 280px; height: 210px; left: 10px; top: 10px; border: 3px solid var(--secondary-color); border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2); -webkit-box-reflect: below 5px linear-gradient(transparent, transparent, #0004); }
+        .carousel figure img { width: 100%; height: 100%; object-fit: cover; }
+        .carousel figure:nth-child(1) { transform: rotateY(0deg) translateZ(350px); }
+        .carousel figure:nth-child(2) { transform: rotateY(45deg) translateZ(350px); }
+        .carousel figure:nth-child(3) { transform: rotateY(90deg) translateZ(350px); }
+        .carousel figure:nth-child(4) { transform: rotateY(135deg) translateZ(350px); }
+        .carousel figure:nth-child(5) { transform: rotateY(180deg) translateZ(350px); }
+        .carousel figure:nth-child(6) { transform: rotateY(225deg) translateZ(350px); }
+        .carousel figure:nth-child(7) { transform: rotateY(270deg) translateZ(350px); }
+        .carousel figure:nth-child(8) { transform: rotateY(315deg) translateZ(350px); }
+        @keyframes rotation { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+        #final_message { position: absolute; top: -100px; left: 50%; transform: translateX(-50%) scale(0); color: var(--primary-color); font-size: 2.2em; text-shadow: 2px 2px 5px rgba(0,0,0,0.2); font-family: 'Dancing Script', cursive; opacity: 0; animation: blastIn 0.8s ease-out forwards, popLoop 2s ease-in-out 0.8s infinite; }
+        @keyframes blastIn { 0% { transform: translateX(-50%) scale(0); opacity: 0; } 80% { transform: translateX(-50%) scale(1.2); opacity: 1; } 100% { transform: translateX(-50%) scale(1); opacity: 1; } }
+        @keyframes popLoop { 0%, 100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.1); } }
+    </style>
+</head>
+<body>
+    <div class="bg-container"></div>
+    <!-- Music path Sahi Kar Diya Gaya Hai -->
+    <audio id="mainMusic" src="hbd.mp3" loop></audio>
+
+    <div id="bodylov">
+        <div id="konten">
+            <div id="kadoin" onclick="mulai()">
+                <!-- Gift image path -->
+                <img src="Valentine-Surprise.png" alt="Gift" style="width:200px;"/>
+                <p style="font-size:20px; font-weight:bold; color:var(--primary-color);">Ek anokha tohfa aapke liye...</p>
+            </div>
+            
+            <div id="kotakpesan">
+                <blockquote id="bq" onclick="showNextMessage()">
+                    <!-- Sticker image path -->
+                    <img id="fotostiker" src="fotostiker.gif" style="width:120px; display:block; margin:0 auto 20px auto;"/>
+                    <p id="kalimat"></p>
+                    <p style="font-size:14px; text-align:center; margin-top:15px; font-weight:bold;">(Agli yaad ke liye yahan click karein)</p>
+                </blockquote>
+            </div>
+
+            <div id="thinking">
+                <div class="spinner"></div>
+                <p>Ek yaad unlock ho rahi hai...</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="gallery">
+        <div class="container">
+            <div id="final_message"></div>
+            <div class="carousel">
+                <!-- Gallery image paths -->
+                <figure><img src="foto1.jpg" alt=""></figure>
+                <figure><img src="foto2.jpg" alt=""></figure>
+                <figure><img src="foto3.jpg" alt=""></figure>
+                <figure><img src="foto4.jpg" alt=""></figure>
+                <figure><img src="foto5.jpg" alt=""></figure>
+                <figure><img src="foto6.jpg" alt=""></figure>
+                <figure><img src="foto7.jpg" alt=""></figure>
+                <figure><img src="foto8.jpg" alt=""></figure>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript code remains the same...
+        const bodylov = document.getElementById('bodylov');
+        const kado = document.getElementById('kadoin');
+        const kotakpesan = document.getElementById('kotakpesan');
+        const thinking = document.getElementById('thinking');
+        const mainMusic = document.getElementById('mainMusic');
+        const messages = [ "Aaj ka din bahut khaas hai, pata hai kyun?", "Kyunki aaj aapka janamdin hai! ✨", "Aapki har muskurahat ke saath yeh duniya aur bhi khoobsurat ho jaati hai.", "Dua hai ki aapka aane wala saal khushiyon, pyaar aur kamyabi se bhara ho. ❤️", "Toh chaliye, is jashn ko aur bhi yaadgaar banate hain!", ];
+        const stickers = ["fotostiker.gif", "fotostiker2.gif", "fotostiker3.gif"];
+        let messageIndex = 0;
+        let nama = '';
+        const bgContainer = document.querySelector('.bg-container');
+        const balloonColors = ['#ff6b6b', '#f9c74f', '#90be6d', '#43aa8b', '#577590', '#f94144'];
+        for (let i = 0; i < 40; i++) { const el = document.createElement('div'); if (i % 2 === 0) { el.classList.add('balloon'); const randomColor = balloonColors[Math.floor(Math.random() * balloonColors.length)]; el.style.setProperty('--balloon-color', randomColor); } else { el.classList.add('particle'); } el.style.left = `${Math.random() * 100}vw`; el.style.animationDelay = `${Math.random() * 15}s`; bgContainer.appendChild(el); }
+        async function mulai() { const { value: inputNama } = await Swal.fire({ title: "Aapka khoobsurat naam?", input: 'text', confirmButtonText: 'Aage Badhein', allowOutsideClick: false, inputValidator: (value) => !value && 'Kripya apna naam likhein!' }); if (inputNama) { nama = inputNama; mainMusic.play(); kado.style.transition = 'opacity 0.5s, transform 0.5s'; kado.style.opacity = '0'; kado.style.transform = 'scale(0.5)'; setTimeout(() => { kado.style.display = 'none'; showNextMessage(); }, 500); } }
+        function showNextMessage() { if (messageIndex < messages.length) { kotakpesan.style.display = 'none'; thinking.style.display = 'block'; setTimeout(() => { thinking.style.display = 'none'; kotakpesan.style.display = 'block'; document.getElementById('kalimat').innerHTML = messages[messageIndex].replace('aapka', `<b>${nama}</b> ka`).replace('Aapki', `<b>${nama}</b> ki`); document.getElementById('fotostiker').src = stickers[messageIndex % stickers.length]; messageIndex++; }, 2000); } else { finalSurprise(); } }
+        document.getElementById('bq').onclick = showNextMessage;
+        async function finalSurprise() { await Swal.fire({ title: `Aakhri Surprise ke liye taiyaar, ${nama}?`, confirmButtonText: 'Haan, bilkul!', allowOutsideClick: false, }).then((result) => { if (result.isConfirmed) { confetti({ particleCount: 200, spread: 180, origin: { y: 0.6 } }); bodylov.style.opacity = '0'; setTimeout(() => { bodylov.style.display = 'none'; tampilkanGaleri(nama); }, 1000); } }); }
+        function tampilkanGaleri(nama) { const gallery = document.getElementById('gallery'); gallery.style.display = 'flex'; gallery.style.animation = 'fadeInUp 1s ease'; document.getElementById('final_message').innerText = `Happy Birthday ${nama}!`; }
+    </script>
+</body>
+</html>
